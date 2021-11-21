@@ -1,14 +1,38 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http.response import HttpResponse
-# Create your views here.
+from django.contrib.auth.models import User
+from django.contrib import messages
 from .models import Room,Topic
 from .forms import RoomForm
-# rooms=[
-#     {'id':1,'name':'Go Python!!'},
-#     {'id':2,'name':'Go DSA!!'},
-#     {'id':3,'name':'Go Js!!'},
-# ]
+from django.contrib.auth import authenticate,login,logout
+
+
+def loginPage(request):
+    if request.method=='POST':
+        uname= request.POST.get('username')
+        pwd=request.POST.get('password')
+        
+        try:
+            user = User.objects.get(username=uname)
+        except:
+            messages.error(request, "User Doesn't Exist")
+
+        user = authenticate(request, username=uname,password=pwd)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('homepage')
+        else:
+            messages.error(request,"Username or password doesn't exist")
+
+    context={}
+    return render(request, 'base/login_register.html',context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('homepage')
+
 
 def home(request):
     query = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -55,4 +79,3 @@ def deleteRoom(request,pk):
         return redirect('homepage')
     return render(request,'base/delete.html',{'obj':room})
 
-    
