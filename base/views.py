@@ -67,13 +67,16 @@ def home(request):
         )
     topics = Topic.objects.all()
     room_count = rooms.count()
-    context={'rooms':rooms, 'topics': topics, 'room_count':room_count}
+    room_messages = Message.objects.all()
+
+
+    context={'rooms':rooms, 'topics': topics, 'room_count':room_count, 'room_messages':room_messages}
     return render(request,'base/home.html',context)
 
 
 def room(request,pk):
     room=Room.objects.get(id=pk)
-    room_messages = room.message_set.all().order_by('-created')
+    room_messages = room.message_set.all()
     participants = room.participants.all()
 
     if request.method=="POST":
@@ -141,7 +144,7 @@ def deleteMessage(request,pk):
     
     if request.method == "POST":
         message.delete()
-        # print(f'room/{message.room.id}')
+       
         return redirect('room',pk=message.room.id)
     return render(request,'base/delete.html',{'obj':message})
 
