@@ -9,6 +9,7 @@ from .forms import RoomForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import UserCreationForm
 
+#login Page
 def loginPage(request):
     page = 'login'
     if request.user.is_authenticated:
@@ -34,7 +35,7 @@ def loginPage(request):
     context={'page':page}
     return render(request, 'base/login_register.html',context)
 
-
+#redirect after logout page
 def logoutUser(request):
     logout(request)
     return redirect('homepage')
