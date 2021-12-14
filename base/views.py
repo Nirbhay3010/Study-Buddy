@@ -58,6 +58,10 @@ def registerPage(request):
     context={'form':form}
     return render(request,'base/login_register.html',context)
 
+def userProfile(request,pk):
+    user = User.objects.get(id=pk)
+    context = {'user':user}
+    return render(request, 'base/user_profile.html',context)
 
 def home(request):
     query = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -68,7 +72,7 @@ def home(request):
         )
     topics = Topic.objects.all()
     room_count = rooms.count()
-    room_messages = Message.objects.filter(Q())
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=query))
 
 
     context={'rooms':rooms, 'topics': topics, 'room_count':room_count, 'room_messages':room_messages}
