@@ -18,12 +18,29 @@
         </div>
         <div class="layout__body">
           <form class="form" method="POST" action="">
-            {% for field in form %}
+            {% csrf_token %}
             <div class="form__group">
-              <label for="room_name">{{field.name|title}}</label>
-              {{field}}
+              <label for="room_topic">Topic</label>
+              <input type="text" name="topic" required list="topic-list" value="{{room.topic.name}}" />
+              <datalist id="topic-list">
+                <select id="room_topic">
+                  {%for topic in topics %}
+                  <option value="{{topic}}">{{topic}}</option>
+                  {% endfor %}
+                </select>
+              </datalist>
             </div>
-            {% endfor %}
+
+            <div class="form__group">
+              <label for="room_name">Room Name</label>
+              {{form.name}}
+            </div>
+
+            <div class="form__group">
+              <label for="room_description">Description</label>
+              {{form.description}}
+            </div>
+            
 
            
             <div class="form__action">
