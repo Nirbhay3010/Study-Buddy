@@ -45,7 +45,7 @@ def registerPage(request):
     form=UserCreationForm()
 
     if request.method=="POST":
-        form =UserCreationForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -73,10 +73,8 @@ def home(request):
         Q(name__icontains=query) |
         Q(description__icontains=query)
         )
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:5]
     room_messages = Message.objects.filter(Q(room__topic__name__icontains=query))
-
-
     context={'rooms':rooms, 'topics': topics, 'room_messages':room_messages}
     return render(request,'base/home.html',context)
 
@@ -182,3 +180,13 @@ def updateUser(request):
     
     return render(request,'base/update-user.html',context)
 
+def topicsPage(request):
+    query = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Topic.objects.filter(name__icontains=query)
+    context={'topics':topics}
+    return render(request,'base/topics.html',context)
+
+def activityPage(request):
+    room_messages=Message.objects.all()[0:2]
+    context={'room_messages':room_messages}
+    return render(request,'base/activity.html',context)
