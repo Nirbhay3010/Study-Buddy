@@ -7,7 +7,6 @@ from .models import Message,Room,Topic,User
 from .forms import RoomForm,UserForm,MyUserCreationForm
 from django.contrib.auth import authenticate,login,logout
 
-
 #login Page
 def loginPage(request):
     page = 'login'

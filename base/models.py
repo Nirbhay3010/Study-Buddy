@@ -12,7 +12,6 @@ class User(AbstractUser):
     USERNAME_FIELD='email'
     REQUIRED_FIELDS = []
 
-
 class Topic(models.Model):
     name = models.CharField(max_length=200)
     def __str__(self):
@@ -41,7 +40,6 @@ class Message(models.Model):
     body = models.TextField()
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-
     class Meta:
         ordering=['-updated','-created']
         
